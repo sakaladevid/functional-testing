@@ -30,7 +30,7 @@ pipeline
        {
            steps
            {
-               git ' https://github.com/intelliqittrainings/FunctionalTesting.git'
+              git 'https://github.com/sakaladevid/functional-testing.git'
            }
        }
        stage('contDelivery')
@@ -41,7 +41,7 @@ pipeline
            }
        }
     }
-}
+
         
 
    
