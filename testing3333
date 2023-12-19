@@ -1,0 +1,67 @@
+node('built-in') 
+{
+   stage('ContinuousDownload')
+   {
+       try
+       {
+           git 'https://github.com/sakaladevid/maven1.git'
+       }
+       catch(Exception e1)
+       {
+           mail bcc: '', body: 'the Jenkins has failed in CI', cc: '', from: '', replyTo: '', subject: 'CI Failed', to: 'sakaladevid1999@gmail.com'
+       }
+   }
+    stage('ContinuousBuild')
+   {
+       try
+       {
+           sh 'mvn package'
+       }
+       catch(Exception e2)
+       {
+           mail bcc: '', body: 'the Jenkins has failed in CB ', cc: '', from: '', replyTo: '', subject: 'CB Failed', to: 'sakaladevid1999@gmail.com'
+      }
+   }
+   stage('ContinuousDeployment')
+   {
+       try
+       {
+           deploy adapters: [tomcat9(credentialsId: 'fe281e54-72eb-4d28-9f60-ab218c4c5d04', path: '', url: 'http://172.31.8.220:8080')], contextPath: 'testapp', war: '**/*.war'
+       }
+       catch(Exception e3)
+       {
+           mail bcc: '', body: 'the jenkins has failed in CD', cc: '', from: '', replyTo: '', subject: 'CD Failed', to: 'sakaladevid1999@gmail.com '
+           
+       }
+   }
+      stage('ContinuousTesting')
+   {
+       try
+       {
+         git 'https://github.com/sakaladevid/functional-testing.git'
+         sh 'java -jar/var/lib/jenkins/workspace/scriptedpipeline handling/testing.jar'
+       }
+        catch(Exception e4)
+       {
+           mail bcc: '', body: 'the jenkins has failed in CT', cc: '', from: '', replyTo: '', subject: 'CT Failed', to: 'sakaladevid1999@gmail.com'
+
+        }
+   }
+   stage('ContinuousDelivery')
+   {
+       try
+       {
+           deploy adapters: [tomcat9(credentialsId: 'fe281e54-72eb-4d28-9f60-ab218c4c5d04', path: '', url: 'http://172.31.15.235:8080')], contextPath: 'prodapp', war: '**/*.war'
+       }
+       catch(Exception e5)
+       {
+          mail bcc: '', body: 'the jenkins has failed in CD', cc: '', from: '', replyTo: '', subject: 'CD Failed', to: 'sakaladevid1999@gmail.com' 
+       }
+   }
+}
+
+    
+
+
+
+
